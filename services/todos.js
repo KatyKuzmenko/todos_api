@@ -1,35 +1,41 @@
-const db = require('./dataBase');
-const helper = require('../helper');
-const config = require('../config');
+const db = require("./dataBase");
+const helper = require("../helper");
+const config = require("../config");
 
-async function getMultiple(page = 1) {
-  const offset = helper.getOffset(page, config.listPerPage);
-  const rows = await db.query(
-    'SELECT id, todo, completed FROM todo OFFSET $1 LIMIT $2', 
-    [offset, config.listPerPage]
-  );
+async function getMultiple() {
+  const rows = await db.query("SELECT * FROM todos");
   const data = helper.emptyOrRows(rows);
 
-  return {
-    data
-  }
+  return data;
 }
 
 async function create(todo) {
   const result = await db.query(
-    'INSERT INTO todo(todo, completed) VALUES ($1, $2) RETURNING *',
-    [todo.todo, todo.author]
+    "INSERT INTO todos(title, isCompleted) VALUES ($1, $2) RETURNING *",
+    [todo.title, todo.isCompleted]
   );
-  let message = 'Error while creating todo';
+  let message = "Error while creating todo";
 
   if (result.length) {
-    message = 'Todo was successfully created';
+    message = "Todo was successfully created";
   }
 
-  return {message};
+  return { message };
+}
+
+async function remove(id) {
+  const result = await db.query(`DELETE FROM todos WHERE id = ${id}`);
+  let message = "Error while deleting todo";
+
+  if (result.length) {
+    message = "Todo was successfully removed";
+  }
+
+  return message;
 }
 
 module.exports = {
   getMultiple,
-  create
-}
+  create,
+  remove
+};

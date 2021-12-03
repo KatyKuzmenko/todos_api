@@ -1,14 +1,13 @@
 const env = process.env;
 
 const config = {
-  db: { /* do not put password or any sensitive info here, done only for demo */
-    host: env.DB_HOST || 'castor.db.elephantsql.com',
+  db: { 
+    host: env.DB_HOST || '127.0.0.1',
     port: env.DB_PORT || '5432',
-    user: env.DB_USER || 'xzxkinwg',
-    password: env.DB_PASSWORD || 'p4NtPd4WwAVOBekO6_pvriEKoyvToKEK',
-    database: env.DB_NAME || 'xzxkinwg',
+    user: env.DB_USER || 'kate',
+    password: env.DB_PASSWORD || '1234',
+    database: env.DB_NAME || 'todos',
   },
-  listPerPage: env.LIST_PER_PAGE || 10,
 };
 
 module.exports = config;
