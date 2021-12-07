@@ -40,12 +40,22 @@ router.delete("/:id", async function (req, res, next) {
 
 router.patch("/:id", async function (req, res, next) {
   try {
-    const { title } = req.body;
-    res.json(await todos.update(req.params.id, title));
+    const { title, iscompleted } = req.body;
+    res.json(await todos.update(req.params.id, title, iscompleted));
   } catch (err) {
-    console.error(`Error while updating todo`);
+    console.error(`Error while updating todo title`);
     next(err);
   }
 });
+
+router.patch("/", async function (req, res, next) {
+  try {
+    const { iscompleted } = req.body
+    res.json(await todos.toggleAll(iscompleted))
+  } catch(err) {
+    console.error(`Error while toggling`)
+    next(err)
+  }
+})
 
 module.exports = router;

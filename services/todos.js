@@ -34,14 +34,26 @@ async function remove(id) {
   return "Todo was successfully removed";
 }
 
-async function update(id, title) {
+async function update(id, title, iscompleted) {
   console.log(id, title);
-  const result = await db.query(`UPDATE todos SET title = $2 WHERE id = $1`, [
-    id,
-    title,
-  ]);
+  if (!title) {
+    const result = await db.query(`UPDATE todos SET iscompleted = $2 WHERE id = $1`, [
+      id,
+      iscompleted
+    ]);
+    return "Todo status was successfully updated";
+  } else {
+    const result = await db.query(`UPDATE todos SET title = $2 WHERE id = $1`, [
+      id,
+      title
+    ]);
+    return "Todo title was successfully updated";
+  }
+}
 
-  return "Todo title was successfully updated";
+async function toggleAll(iscompleted) {
+  const result = await db.query(`UPDATE todos SET iscompleted = $1`, [iscompleted])
+  return "All todos toggled"
 }
 
 module.exports = {
@@ -50,4 +62,5 @@ module.exports = {
   remove,
   getTodoById,
   update,
+  toggleAll
 };
