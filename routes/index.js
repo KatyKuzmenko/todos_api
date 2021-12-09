@@ -1,10 +1,8 @@
-const express = require('express');
-const router = express.Router();
-const todos = require('../services/todos');
+const express = require('express')
+const router = express.Router()
 
+router.get('/', function (req, res, next) {
+  res.json({ message: 'use /todos endpoint' })
+})
 
-router.get('/', function(req, res, next) {
-  res.json({message: 'OK'});
-});
-
-module.exports = router;
+module.exports = router

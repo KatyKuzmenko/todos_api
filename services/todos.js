@@ -1,59 +1,62 @@
-const db = require("./dataBase");
-const helper = require("../helper");
-const config = require("../config");
+const db = require('./dataBase')
+const helper = require('../helper')
 
 async function getMultiple() {
-  const rows = await db.query("SELECT * FROM todos");
-  const data = helper.emptyOrRows(rows);
+  const rows = await db.query('SELECT * FROM todos ORDER by id ASC')
+  const data = helper.emptyOrRows(rows)
 
-  return data;
+  return data
 }
 
 async function getTodoById(id) {
-  const rows = await db.query(`SELECT * FROM todos WHERE id=${id}`);
-  const data = helper.emptyOrRows(rows);
-  return data;
+  const rows = await db.query(`SELECT * FROM todos WHERE id=${id}`)
+  const data = helper.emptyOrRows(rows)
+
+  return data
 }
 
 async function create(todo) {
-  const result = await db.query(
-    "INSERT INTO todos(title) VALUES ($1) RETURNING *",
-    [todo.title]
-  );
-  let message = "Error while creating todo";
+  const result = await db.query('INSERT INTO todos(title) VALUES ($1) RETURNING *', [todo.title])
+  let message = 'Error while creating todo'
 
   if (result.length) {
-    message = "Todo was successfully created";
+    message = 'Todo was successfully created'
   }
 
-  return { message };
+  return { message }
 }
 
 async function remove(id) {
-  const result = await db.query(`DELETE FROM todos WHERE id = ${id}`);
-  return "Todo was successfully removed";
+  const result = await db.query(`DELETE FROM todos WHERE id = ${id}`)
+
+  return 'Todo was successfully removed'
+}
+
+async function removeCompleted() {
+  const result = await db.query(`DELETE FROM todos WHERE iscompleted = true`)
+
+  return 'Completed todos was successfully removed'
 }
 
 async function update(id, title, iscompleted) {
-  console.log(id, title);
   if (!title) {
     const result = await db.query(`UPDATE todos SET iscompleted = $2 WHERE id = $1`, [
       id,
-      iscompleted
-    ]);
-    return "Todo status was successfully updated";
+      iscompleted,
+    ])
+
+    return 'Todo status was successfully updated'
   } else {
-    const result = await db.query(`UPDATE todos SET title = $2 WHERE id = $1`, [
-      id,
-      title
-    ]);
-    return "Todo title was successfully updated";
+    const result = await db.query(`UPDATE todos SET title = $2 WHERE id = $1`, [id, title])
+
+    return 'Todo title was successfully updated'
   }
 }
 
 async function toggleAll(iscompleted) {
   const result = await db.query(`UPDATE todos SET iscompleted = $1`, [iscompleted])
-  return "All todos toggled"
+
+  return 'All todos toggled'
 }
 
 module.exports = {
@@ -62,5 +65,6 @@ module.exports = {
   remove,
   getTodoById,
   update,
-  toggleAll
-};
+  toggleAll,
+  removeCompleted,
+}
