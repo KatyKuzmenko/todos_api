@@ -17,39 +17,34 @@ async function getTodoById(id) {
 
 async function create(todo) {
   const result = await db.query('INSERT INTO todos(title) VALUES ($1) RETURNING *', [todo.title])
-  let message = 'Error while creating todo'
-
-  if (result.length) {
-    message = 'Todo was successfully created'
-  }
-
-  return { message }
+  return result[0].id
 }
 
 async function remove(id) {
   const result = await db.query(`DELETE FROM todos WHERE id = ${id}`)
-
-  return 'Todo was successfully removed'
+  
+  return result
 }
 
 async function removeCompleted() {
   const result = await db.query(`DELETE FROM todos WHERE iscompleted = true`)
-
   return 'Completed todos was successfully removed'
 }
 
 async function update(id, title, iscompleted) {
-  if (!title) {
+  if (title === undefined) {
     const result = await db.query(`UPDATE todos SET iscompleted = $2 WHERE id = $1`, [
       id,
       iscompleted,
     ])
 
-    return 'Todo status was successfully updated'
-  } else {
+    return 'Ok'
+  } 
+
+  if (iscompleted === undefined) {
     const result = await db.query(`UPDATE todos SET title = $2 WHERE id = $1`, [id, title])
 
-    return 'Todo title was successfully updated'
+    return 'title updated'
   }
 }
 
