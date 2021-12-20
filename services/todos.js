@@ -1,5 +1,6 @@
 const db = require('./dataBase')
 const helper = require('../helper')
+const { is } = require('express/lib/request')
 
 async function getMultiple() {
   const rows = await db.query('SELECT * FROM todos ORDER by id ASC')
@@ -17,7 +18,7 @@ async function getTodoById(id) {
 
 async function create(todo) {
   const result = await db.query('INSERT INTO todos(title) VALUES ($1) RETURNING *', [todo.title])
-  return result[0].id
+  return result[0]
 }
 
 async function remove(id) {
@@ -31,27 +32,20 @@ async function removeCompleted() {
   return 'Completed todos was successfully removed'
 }
 
-async function update(id, title, iscompleted) {
-  if (title === undefined) {
-    const result = await db.query(`UPDATE todos SET iscompleted = $2 WHERE id = $1`, [
-      id,
-      iscompleted,
+async function update(todo) {
+    const result = await db.query(`UPDATE todos SET title = $2, iscompleted = $3 WHERE id = $1 RETURNING *`, [
+      todo.id,
+      todo.title,
+      todo.iscompleted,
     ])
-
-    return 'Ok'
-  } 
-
-  if (iscompleted === undefined) {
-    const result = await db.query(`UPDATE todos SET title = $2 WHERE id = $1`, [id, title])
-
-    return 'title updated'
-  }
+    console.log(result[0])
+    return result[0]
 }
 
 async function toggleAll(iscompleted) {
   const result = await db.query(`UPDATE todos SET iscompleted = $1`, [iscompleted])
 
-  return 'All todos toggled'
+  return iscompleted
 }
 
 module.exports = {

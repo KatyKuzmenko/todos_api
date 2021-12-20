@@ -49,8 +49,7 @@ router.delete('/', async function (req, res, next) {
 
 router.patch('/:id', async function (req, res, next) {
   try {
-    const { title, iscompleted } = req.body
-    res.json(await todos.update(req.params.id, title, iscompleted))
+    res.json(await todos.update(req.body))
   } catch (err) {
     console.error(`Error while updating todo title`)
     next(err)
