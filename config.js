@@ -10,4 +10,8 @@ const config = {
   },
 };
 
+// module.exports = {
+//   secret: "SECRET_KEY_RANDOM"
+// }
+
 module.exports = config;

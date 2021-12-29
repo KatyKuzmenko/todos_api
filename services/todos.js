@@ -1,6 +1,5 @@
 const db = require('./dataBase')
 const helper = require('../helper')
-const { is } = require('express/lib/request')
 
 async function getMultiple() {
   const rows = await db.query('SELECT * FROM todos ORDER by id ASC')
@@ -23,7 +22,7 @@ async function create(todo) {
 
 async function remove(id) {
   const result = await db.query(`DELETE FROM todos WHERE id = ${id}`)
-  
+  console.log(result)
   return result
 }
 
@@ -38,7 +37,6 @@ async function update(todo) {
       todo.title,
       todo.iscompleted,
     ])
-    console.log(result[0])
     return result[0]
 }
 
