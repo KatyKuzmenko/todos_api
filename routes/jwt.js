@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const jwt = require('../middleware/jwtVerify')
+const jwt = require('../services/jwt')
 
 router.post('/', async function(req, res, next) {
   try {

@@ -1,4 +1,3 @@
-const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
 const db = require('./dataBase')
 const helper = require('../helper')
