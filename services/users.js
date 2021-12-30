@@ -1,16 +1,7 @@
 const jwt = require('jsonwebtoken')
-const { secret } = require('../config')
 const bcrypt = require('bcryptjs')
 const db = require('./dataBase')
 const helper = require('../helper')
-
-const generateAccessToken = (id) => {
-  const payload = {
-    id,
-  }
-
-  return jwt.sign(payload, secret, { expiresIn: '12h' })
-}
 
 async function saveUser(user) {
   const result = await db.query('INSERT INTO users(login, password) VALUES($1, $2) RETURNING *', [user.login, user.password])

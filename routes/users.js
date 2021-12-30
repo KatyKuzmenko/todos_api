@@ -29,7 +29,7 @@ router.get('/:id', async function (req, res, next) {
   }
 })
 
-router.delete('/:id', async function(req, res, next) {
+router.delete('/:id', async function (req, res, next) {
   try {
     res.json(await users.deleteUser(req.params.id))
   } catch (err) {
@@ -37,21 +37,5 @@ router.delete('/:id', async function(req, res, next) {
     next(err)
   }
 })
-
-async function registration(req,res) {
-  try {
-    const {login, password} = req.body
-    const candidate = await getUserByLogin({login})
-    if (candidate) {
-      return res.status(400).json({message: `User with login ${login} is already exists`})
-    }
-    const hashedPassword = bcrypt.hashSync(password, 6)
-    const user = {login, password: hashedPassword}
-    await saveUser(user)
-    return res.json({message: 'User is successfully saved'})
-  } catch {
-    res.status(400).json({message: 'Registration failed. Try again'})
-  }
-}
 
 module.exports = router
