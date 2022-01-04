@@ -1,6 +1,13 @@
 const jwt = require('jsonwebtoken')
 secret = 'SECRET_KEY_RANDOM'
 
+const registration = (req, res) => {
+  try {
+    const {login, password} = req.body
+  } catch {
+    
+  }
+}
 
 const generateToken = (id) => {
   const token = jwt.sign({userId: id}, secret, { expiresIn: 1000000 })
